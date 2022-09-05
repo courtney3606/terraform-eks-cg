@@ -6,6 +6,6 @@ output "cluster_name" {
 }
 
 output "IP-address" {
-    value = module.eks-node-group[*].ip_address
+    value = module.eks[*].ip_address
     description = "The IP address of containers"
 }
