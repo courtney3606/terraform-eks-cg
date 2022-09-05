@@ -64,8 +64,7 @@ resource "aws_vpc" "eks-vpc" {
 
   tags = {
     Name = "eks-vpc"
-    "kubernetes.io/cluster/${aws_eks_cluster.cg-cluster.name}" = "shared"
-  }
+
 }
 resource "aws_subnet" "eks-subnet1" {
   availability_zone = data.aws_availability_zones.available.names
