@@ -1,14 +1,17 @@
 # --- eks/main.tf ---
 
-resource "aws_eks_node_group" "eks-node-group" {
+resource "aws_eks_node_group" "eks-node-group1" {
   cluster_name    = aws_eks_cluster.cg-cluster.name
-  node_group_name = "eks-node-group"
+  node_group_name = "eks-node-group1"
   node_role_arn   = aws_iam_role.eks_role.arn
-  subnet_ids      = [aws_subnet.eks-subnet1.id, aws_subnet.eks-subnet2.id]
+  subnet_ids      = aws_subnet.eks-subnet1.id
+  vpc_security_group_ids = [
+      aws_security_group.node_group_one.id
+  ]
 
   scaling_config {
-    desired_size = 2
-    max_size     = 2
+    desired_size = 1
+    max_size     = 1
     min_size     = 1
   }
 
@@ -21,6 +24,61 @@ resource "aws_eks_node_group" "eks-node-group" {
     aws_iam_role_policy_attachment.eks_role-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks_role-AmazonEC2ContainerRegistryReadOnly,
   ]
+}
+resource "aws_eks_node_group" "eks-node-group2" {
+  cluster_name    = aws_eks_cluster.cg-cluster.name
+  node_group_name = "eks-node-group2"
+  node_role_arn   = aws_iam_role.eks_role.arn
+  subnet_ids      =  aws_subnet.eks-subnet2.id
+
+  vpc_security_group_ids = [
+      aws_security_group.node_group_two.id
+  ]
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  update_config {
+    max_unavailable = 2
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_role-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks_role-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.eks_role-AmazonEC2ContainerRegistryReadOnly,
+  ]
+}
+resource "aws_security_group" "node_group_one" {
+  name_prefix = "node_group_one"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "10.0.0.0/8",
+    ]
+  }
+}
+
+resource "aws_security_group" "node_group_two" {
+  name_prefix = "node_group_two"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "192.168.0.0/16",
+    ]
+  }
 }
 
 resource "aws_iam_role" "eks_role" {
@@ -71,9 +129,11 @@ resource "aws_subnet" "eks-subnet1" {
   availability_zone = data.aws_availability_zones.available.names
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8)
   vpc_id            = aws_vpc.eks-vpc
+  map_public_ip_on_launch = true
 
   tags = {
-    "kubernetes.io/cluster/${aws_eks_cluster.cg-cluster.name}" = "shared"
+      Name = "eks-subnet1"
+    
   }
 }
 
@@ -81,9 +141,10 @@ resource "aws_subnet" "eks-subnet2" {
   availability_zone = data.aws_availability_zones.available.names
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8)
   vpc_id            = aws_vpc.eks-vpc
+  map_public_ip_on_launch = true
 
   tags = {
-    "kubernetes.io/cluster/${aws_eks_cluster.cg-cluster.name}" = "shared"
+    Name = "eks-subnet2"
   }
 }
 
@@ -95,7 +156,7 @@ resource "aws_internet_gateway" "eks-ig" {
   }
 }
 
-resource "aws_route_table" "eks-rt" {
+resource "aws_route_table" "eks-rt1" {
   vpc_id = aws_vpc.eks-vpc.id
 
   route {
@@ -103,16 +164,23 @@ resource "aws_route_table" "eks-rt" {
     gateway_id = aws_internet_gateway.eks-ig.id
   }
 }
+resource "aws_route_table" "eks-rt2" {
+  vpc_id = aws_vpc.eks-vpc.id
 
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.eks-ig.id
+  }
+}
 resource "aws_route_table_association" "eks-rta1" {
 
   subnet_id      = aws_subnet.eks-subnet1.id
-  route_table_id = aws_route_table.eks-rt.id
+  route_table_id = aws_route_table.eks-rt1.id
 }
 resource "aws_route_table_association" "k8s-acc" {
 
   subnet_id      = aws_subnet.eks-subnet2.id
-  route_table_id = aws_route_table.eks-rt.id
+  route_table_id = aws_route_table.eks-rt2.id
 }
 
 
