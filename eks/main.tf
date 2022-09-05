@@ -66,6 +66,7 @@ resource "aws_vpc" "eks-vpc" {
     Name = "eks-vpc"
 
 }
+}
 resource "aws_subnet" "eks-subnet1" {
   availability_zone = data.aws_availability_zones.available.names
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8)
