@@ -1,4 +1,4 @@
-# ---eks/outputs.tf ---
+# ---root/outputs.tf ---
 
 output "cluster_name" {
   value = aws_eks_cluster.cg-cluster.name
