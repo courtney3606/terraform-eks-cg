@@ -5,6 +5,6 @@ variable "container_ips"{
 
 variable "cluster_name"{
     type = string
-    default = "cg-cluster- ${random_string.random.id}"
+    default = cg-cluster- ${random_string.random.id}
 
 }
