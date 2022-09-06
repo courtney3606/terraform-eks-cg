@@ -6,6 +6,6 @@ output "cluster_name" {
 }
 
 output "container_ips" {
-    value = aws_eks_node_group.eks-node-group[*].public_ip
+    value = aws_eks_node_group.eks-node-group[*].id
     description = "The IP address of containers"
 }
