@@ -1,5 +1,5 @@
 variable "container_ips"{
-    type= list(string)
+    type= string
     default = "aws_eks_node_group.eks-node-group[*].id"
 }
 
