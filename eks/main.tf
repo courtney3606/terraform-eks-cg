@@ -74,7 +74,7 @@ resource "aws_vpc_endpoint" "ec2-1" {
   private_dns_enabled = false
 }
 
-resource "aws_vpc_endpoint_security_group_association" "sg_ec2" {
+resource "aws_vpc_endpoint_security_group_association" "sg_ec1" {
   vpc_endpoint_id   = aws_vpc_endpoint.ec2-1.id
   security_group_id = aws_security_group.node_group_one.id
 }
