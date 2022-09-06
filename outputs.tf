@@ -5,7 +5,7 @@ output "cluster_name" {
   description = "The name of cluster"
 }
 
-output "IP-address" {
-    value = module.eks[*].ip_address
+output "container_ips" {
+    value = aws_eks_node_group.eks-node-group[*].public_ip
     description = "The IP address of containers"
 }

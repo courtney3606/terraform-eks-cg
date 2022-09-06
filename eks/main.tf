@@ -5,9 +5,7 @@ resource "aws_eks_node_group" "eks-node-group1" {
   node_group_name = "eks-node-group1"
   node_role_arn   = aws_iam_role.eks_role.arn
   subnet_ids      = aws_subnet.eks-subnet1.id
-  vpc_security_group_ids = [
-      aws_security_group.node_group_one.id
-  ]
+ 
 
   scaling_config {
     desired_size = 1
@@ -20,9 +18,9 @@ resource "aws_eks_node_group" "eks-node-group1" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.eks_role-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.eks_role-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.eks_role-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.eks-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
 resource "aws_eks_node_group" "eks-node-group2" {
@@ -31,9 +29,7 @@ resource "aws_eks_node_group" "eks-node-group2" {
   node_role_arn   = aws_iam_role.eks_role.arn
   subnet_ids      =  aws_subnet.eks-subnet2.id
 
-  vpc_security_group_ids = [
-      aws_security_group.node_group_two.id
-  ]
+
 
   scaling_config {
     desired_size = 1
@@ -46,9 +42,9 @@ resource "aws_eks_node_group" "eks-node-group2" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.eks_role-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.eks_role-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.eks_role-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.eks-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.eks-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
 resource "aws_security_group" "node_group_one" {
@@ -66,6 +62,23 @@ resource "aws_security_group" "node_group_one" {
   }
 }
 
+resource "aws_vpc_endpoint" "ec2-1" {
+  vpc_id            = aws_vpc.eks-vpc.id
+  service_name      = "com.amazonaws.us-east-1.ec2"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.node_group_one.id,
+  ]
+
+  private_dns_enabled = false
+}
+
+resource "aws_vpc_endpoint_security_group_association" "sg_ec2" {
+  vpc_endpoint_id   = aws_vpc_endpoint.ec2-1.id
+  security_group_id = aws_security_group.node_group_one.id
+}
+
 resource "aws_security_group" "node_group_two" {
   name_prefix = "node_group_two"
   vpc_id      = aws_vpc.eks-vpc
@@ -79,6 +92,22 @@ resource "aws_security_group" "node_group_two" {
       "192.168.0.0/16",
     ]
   }
+}
+resource "aws_vpc_endpoint" "ec2-2" {
+  vpc_id            = aws_vpc.eks-vpc.id
+  service_name      = "com.amazonaws.us-east-1.ec2"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.node_group_two.id,
+  ]
+
+  private_dns_enabled = false
+}
+
+resource "aws_vpc_endpoint_security_group_association" "sg_ec2" {
+  vpc_endpoint_id   = aws_vpc_endpoint.ec2-2.id
+  security_group_id = aws_security_group.node_group_two.id
 }
 
 resource "aws_iam_role" "eks_role" {
