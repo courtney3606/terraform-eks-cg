@@ -5,6 +5,7 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.16"
+      region  = var.region
     }
     random = {
       source  = "hashicorp/random"
@@ -16,7 +17,3 @@ provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
 } 
-
-provider "aws" {
-  region  = var.region
-}
