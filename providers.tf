@@ -20,4 +20,5 @@ provider "kubernetes" {
 
 provider "aws" {
   region = "us-east-1"
+  profile = "CC_user86"
 }
