@@ -6,10 +6,10 @@ variable "region" {
 }
 variable "container_ips"{
     type= string
-    default = var.container_ips
+
 }
 
 variable "cluster_name"{
     type = string
-    default = var.cluster_name
+    
 }
