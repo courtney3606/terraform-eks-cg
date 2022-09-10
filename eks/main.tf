@@ -156,7 +156,7 @@ resource "aws_vpc" "eks-vpc" {
 }
 resource "aws_subnet" "eks-subnet1" {
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8, 1)
-  vpc_id            = "aws_vpc.eks-vpc"
+  vpc_id            = aws_vpc.eks-vpc.id
   map_public_ip_on_launch = true
 
   tags = {
@@ -167,7 +167,7 @@ resource "aws_subnet" "eks-subnet1" {
 
 resource "aws_subnet" "eks-subnet2" {
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8,2)
-  vpc_id            = "aws_vpc.eks-vpc"
+  vpc_id            = aws_vpc.eks-vpc.id
   map_public_ip_on_launch = true
 
   tags = {
