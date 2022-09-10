@@ -232,11 +232,11 @@ resource "aws_eks_cluster" "cgcluster" {
   ]
 } 
 output "endpoint" {
-  value = aws_eks_cluster.cg-cluster.endpoint
+  value = aws_eks_cluster.cgcluster.endpoint
 }
 
 output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.cg-cluster.certificate_authority[0].data
+  value = aws_eks_cluster.cgcluster.certificate_authority[0].data
 }
 resource "aws_iam_role" "eks_role_cluster" {
   name = "eks-cluster-role"
