@@ -1,7 +1,7 @@
 # --- eks/main.tf ---
 
 resource "aws_eks_node_group" "eks-node-group1" {
-  cluster_name    = var.cluster_name
+  cluster_name    = aws_eks_cluster.cgcluster
   node_group_name = "eks-node-group1"
   node_role_arn   = aws_iam_role.eks_role.arn
   subnet_ids      = ["aws_subnet.eks-subnet1.id"]
@@ -24,7 +24,7 @@ resource "aws_eks_node_group" "eks-node-group1" {
   ]
 }
 resource "aws_eks_node_group" "eks-node-group2" {
-  cluster_name    = var.cluster_name
+  cluster_name    = aws_eks_cluster.cgcluster
   node_group_name = "eks-node-group2"
   node_role_arn   = aws_iam_role.eks_role.arn
   subnet_ids      =  ["aws_subnet.eks-subnet2.id"]
@@ -215,11 +215,11 @@ resource "aws_route_table_association" "k8s-acc" {
 
 resource "random_string" "random" {
   length           = 5
-  special          = false
+  special          = true
 }
 
-resource "aws_eks_cluster" "cg-cluster" {
-  name     = "cg-cluster- ${random_string.random.id}"
+resource "aws_eks_cluster" "cgcluster" {
+  name     = "cgcluster- ${random_string.random.id}"
   role_arn = aws_iam_role.eks_role.arn 
 
   vpc_config {
