@@ -1,7 +1,7 @@
 # ---eks/outputs.tf ---
 
 output "cluster_name" {
-  value = "aws_eks_cluster.cgcluster.name"
+  value = "aws_eks_cluster.cgcluster.${random_string.random}.name"
   description = "The name of cluster"
 }
 
