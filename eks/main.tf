@@ -215,7 +215,7 @@ resource "aws_route_table_association" "k8s-acc" {
 
 resource "random_string" "random" {
   length           = 5
-  special          = true
+  upper          = true
 }
 
 resource "aws_eks_cluster" "cgcluster" {
