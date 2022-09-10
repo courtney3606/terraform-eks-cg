@@ -218,7 +218,7 @@ resource "random_string" "random" {
 
 resource "aws_eks_cluster" "cgcluster" {
   name     = "cgcluster-"
-  role_arn = aws_iam_role.eks_role.arn 
+  role_arn = aws_iam_role.eks_role_cluster.arn 
 
   vpc_config {
     subnet_ids = [aws_subnet.eks-subnet1.id, aws_subnet.eks-subnet2.id]
