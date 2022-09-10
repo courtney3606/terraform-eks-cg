@@ -49,7 +49,7 @@ resource "aws_eks_node_group" "eks-node-group2" {
 }
 resource "aws_security_group" "node_group_one" {
   name_prefix = "node_group_one"
-  vpc_id      = "aws_vpc.eks-vpc"
+  vpc_id      = aws_vpc.eks-vpc.id
 
   ingress {
     from_port = 22
@@ -81,7 +81,7 @@ resource "aws_vpc_endpoint_security_group_association" "sg_ec1" {
 
 resource "aws_security_group" "node_group_two" {
   name_prefix = "node_group_two"
-  vpc_id      = "aws_vpc.eks-vpc"
+  vpc_id      = aws_vpc.eks-vpc.id
 
   ingress {
     from_port = 22
@@ -155,7 +155,7 @@ resource "aws_vpc" "eks-vpc" {
 }
 }
 resource "aws_subnet" "eks-subnet1" {
-  availability_zone = "data.aws_availability_zones.available.names"
+  availability_zone = us-east-1a
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8, 1)
   vpc_id            = "aws_vpc.eks-vpc"
   map_public_ip_on_launch = true
@@ -167,7 +167,7 @@ resource "aws_subnet" "eks-subnet1" {
 }
 
 resource "aws_subnet" "eks-subnet2" {
-  availability_zone = "data.aws_availability_zones.available.names"
+  availability_zone = us-east-1c
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8,2)
   vpc_id            = "aws_vpc.eks-vpc"
   map_public_ip_on_launch = true
