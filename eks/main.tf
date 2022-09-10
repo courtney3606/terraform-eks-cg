@@ -217,7 +217,7 @@ resource "random_string" "random" {
 }
 
 resource "aws_eks_cluster" "cgcluster" {
-  name     = "cgcluster- ${random_string.random}"
+  name     = ["cgcluster- ${random_string.random}"]
   role_arn = aws_iam_role.eks_role.arn 
 
   vpc_config {
