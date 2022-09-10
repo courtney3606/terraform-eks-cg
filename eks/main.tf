@@ -4,7 +4,7 @@ resource "aws_eks_node_group" "eks-node-group1" {
   cluster_name    = var.cluster_name
   node_group_name = "eks-node-group1"
   node_role_arn   = aws_iam_role.eks_role.arn
-  subnet_ids      = "aws_subnet.eks-subnet1.id"
+  subnet_ids      = ["aws_subnet.eks-subnet1.id"]
  
 
   scaling_config {
@@ -27,7 +27,7 @@ resource "aws_eks_node_group" "eks-node-group2" {
   cluster_name    = var.cluster_name
   node_group_name = "eks-node-group2"
   node_role_arn   = aws_iam_role.eks_role.arn
-  subnet_ids      =  "aws_subnet.eks-subnet2.id"
+  subnet_ids      =  ["aws_subnet.eks-subnet2.id"]
 
 
 
