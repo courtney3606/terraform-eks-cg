@@ -220,6 +220,7 @@ resource "random_string" "random" {
 resource "aws_eks_cluster" "cgcluster" {
   name     = "cgcluster-"
   role_arn = aws_iam_role.eks_role_cluster.arn 
+  all_availability_zones = true
   
 
   vpc_config {
