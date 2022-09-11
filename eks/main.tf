@@ -142,7 +142,7 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEC2ContainerRegistryReadOnl
 
 data "aws_availability_zones" "available" {
   state = "available"
-  exclude_zone_id = us-east-1e
+  exclude_zone_ids = us-east-1e
 }
 resource "aws_vpc" "eks-vpc" {
   cidr_block       = "10.0.0.0/16"
