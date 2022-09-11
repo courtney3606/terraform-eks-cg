@@ -14,7 +14,7 @@ resource "aws_eks_node_group" "eks-node-group1" {
   }
 
   update_config {
-    max_unavailable = 2
+    max_unavailable = 1
   }
 
   depends_on = [
@@ -38,7 +38,7 @@ resource "aws_eks_node_group" "eks-node-group2" {
   }
 
   update_config {
-    max_unavailable = 2
+    max_unavailable = 1
   }
 
   depends_on = [
