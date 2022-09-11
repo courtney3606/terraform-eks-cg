@@ -142,6 +142,7 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEC2ContainerRegistryReadOnl
 
 data "aws_availability_zones" "available" {
   state = "available"
+  all_availability_zones = true
 }
 resource "aws_vpc" "eks-vpc" {
   cidr_block       = "10.0.0.0/16"
@@ -219,6 +220,7 @@ resource "random_string" "random" {
 resource "aws_eks_cluster" "cgcluster" {
   name     = "cgcluster-"
   role_arn = aws_iam_role.eks_role_cluster.arn 
+  
 
   vpc_config {
     subnet_ids = [aws_subnet.eks-subnet1.id, aws_subnet.eks-subnet2.id]
