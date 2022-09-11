@@ -142,7 +142,7 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEC2ContainerRegistryReadOnl
 
 data "aws_availability_zones" "available" {
   state = "available"
-  all_availability_zones = true
+  exclude_zone_id = us-east-1e
 }
 resource "aws_vpc" "eks-vpc" {
   cidr_block       = "10.0.0.0/16"
@@ -230,7 +230,7 @@ resource "aws_eks_cluster" "cgcluster" {
   depends_on = [
     aws_iam_role_policy_attachment.eks-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKSVPCResourceController,
-    data.aws_availability_zones.available,
+
   ]
 } 
 output "endpoint" {
