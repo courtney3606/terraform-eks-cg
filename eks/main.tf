@@ -142,7 +142,6 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEC2ContainerRegistryReadOnl
 
 data "aws_availability_zones" "available" {
   state = "available"
-  exclude_zone_ids = us-east-1e
 }
 resource "aws_vpc" "eks-vpc" {
   cidr_block       = "10.0.0.0/16"
@@ -159,6 +158,7 @@ resource "aws_subnet" "eks-subnet1" {
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8, 1)
   vpc_id            = aws_vpc.eks-vpc.id
   map_public_ip_on_launch = true
+  availability_zone = "us-east-1b"
 
   tags = {
       Name = "eks-subnet1"
@@ -170,6 +170,7 @@ resource "aws_subnet" "eks-subnet2" {
   cidr_block        = cidrsubnet(aws_vpc.eks-vpc.cidr_block, 8,2)
   vpc_id            = aws_vpc.eks-vpc.id
   map_public_ip_on_launch = true
+  availability_zone = "us-east-1d"
 
   tags = {
     Name = "eks-subnet2"
