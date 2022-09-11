@@ -220,7 +220,7 @@ resource "random_string" "random" {
 resource "aws_eks_cluster" "cgcluster" {
   name     = "cgcluster-"
   role_arn = aws_iam_role.eks_role_cluster.arn 
-  all_availability_zones = true
+  
   
 
   vpc_config {
@@ -230,6 +230,7 @@ resource "aws_eks_cluster" "cgcluster" {
   depends_on = [
     aws_iam_role_policy_attachment.eks-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKSVPCResourceController,
+    data.aws_availability_zones.available,
   ]
 } 
 output "endpoint" {
